@@ -1,0 +1,153 @@
+<template>
+  <div class="app-container">
+
+    <div class="filter-container">
+      <el-input
+        v-model="listQuery.search_data"
+        clearable
+        class="filter-item"
+        style="width: 200px;"
+        placeholder="请输入关键字"
+      />
+      <el-button
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="handleFilter"
+      >查找</el-button>
+      <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleAdd">
+        添加
+      </el-button>
+    </div>
+
+    <el-table
+      v-loading="listLoading"
+      :data="tableData"
+      border
+      style="width: 100%"
+    >
+      {%column%}
+      <el-table-column align="center" label="操作" width="200">
+        <template slot-scope="{ row }">
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-edit"
+            @click="handleEdit(row)"
+          >
+            编辑
+          </el-button>
+          <el-button
+            type="danger"
+            size="small"
+            icon="el-icon-delete"
+            @click="handleDelete(row)"
+          >
+            删除
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getList"
+    />
+
+    <{%className%}Form ref="{%lowerClassName%}" :visible="false" form-title="{%titleName%}" @children="parentHandel" />
+
+  </div>
+</template>
+
+<script>
+import { vuexData } from '@/utils/mixin'
+import { {%lowerClassName%}List, {%lowerClassName%}Delete } from '@/api/api'
+import Pagination from '@/components/Pagination'
+import {%className%}Form from './components/{%className%}Form'
+
+export default {
+  components: {
+    Pagination,
+    {%className%}Form
+  },
+  mixins: [vuexData],
+  data() {
+    return {
+      listLoading: true,
+      tableData: [],
+      total: 0,
+      listQuery: {
+        page: 1,
+        limit: 10,
+        search_data: undefined
+      }
+    }
+  },
+  created() {
+    this.initData()
+  },
+  methods: {
+    /**
+     * 初始化数据
+     */
+    initData() {
+      this.getList()
+    },
+    /**
+     * {%titleName%}列表
+     */
+    getList() {
+      this.listLoading = true
+      {%lowerClassName%}List(this.listQuery).then((response) => {
+        this.tableData = response.data.data
+        this.total = response.data.total || 0
+        this.listLoading = false
+      })
+    },
+    /**
+     * {%titleName%}列表查询
+     */
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
+    },
+    /**
+     * {%titleName%}添加
+     */
+    handleAdd() {
+      this.$refs.{%lowerClassName%}.showAdd()
+    },
+    /**
+     * {%titleName%}编辑
+     */
+    handleEdit(obj) {
+      this.$refs.{%lowerClassName%}.showEdit(obj)
+    },
+    /**
+     * {%titleName%}删除
+     */
+    handleDelete(obj) {
+      this.$confirm('此操作将删除数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        {%lowerClassName%}Delete({ id: obj.{%pKey%} }).then((response) => {
+          this.initData()
+          this.$message.success(response.msg)
+        })
+      }).catch(() => {
+        this.$message.info('已取消')
+      })
+    },
+    // 用户信息组件回传方法
+    parentHandel() {
+      this.initData()
+    }
+
+  }
+}
+</script>

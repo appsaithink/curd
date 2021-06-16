@@ -1,0 +1,16 @@
+<?php
+declare (strict_types = 1);
+
+namespace app\api\model;
+
+use app\common\model\BaseModel;
+
+/**
+ * {%titleName%}模型
+ */
+class {%className%} extends BaseModel
+{
+    // 主键
+    protected $pk = '{%pKey%}';
+
+}

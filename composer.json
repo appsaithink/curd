@@ -1,0 +1,29 @@
+{
+    "name": "saithink/curd",
+    "description": "this is a generate code framework",
+    "type": "l",
+    "license": "Apache-2.0",
+    "autoload": {
+        "psr-4": {
+            "saithink\\curd\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "sai",
+            "email": "1430792918@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+	"extra": {
+        "think": {
+            "services": [
+                "saithink\\curd\\Service"
+            ],
+            "config": {
+                "curd": "src/config.php"
+            }
+        }
+    }
+}

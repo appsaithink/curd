@@ -1,0 +1,125 @@
+<template>
+  <el-dialog
+    :title="dialogTitle"
+    :visible.sync="visibleDialog"
+    :close-on-click-modal="false"
+    width="860px"
+    @close="handleCancel"
+  >
+    <el-form ref="ruleForm" :model="form" :inline="true" :rules="rules" :label-width="formLabelWidth">
+    
+      {%formItem%}
+    </el-form>
+
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="handleCancel">取 消</el-button>
+      <el-button v-loading="btnLoading" type="primary" @click="handleSubmit">确 定</el-button>
+    </div>
+
+  </el-dialog>
+</template>
+
+<script>
+import { vuexData } from '@/utils/mixin'
+import { {%lowerClassName%}Add, {%lowerClassName%}Edit } from '@/api/api'
+
+export default {
+  name: '{%className%}Form',
+  props: {
+    formTitle: {
+      type: String,
+      default: '数据'
+    }
+  },
+  mixins: [vuexData],
+  data() {
+    return {
+      dialogTitle: this.formTitle,
+      visibleDialog: false,
+      btnLoading: false,
+      action: 'add',
+      form: {
+        {%formField%}
+      },
+      rules: {
+        planname: [
+          { required: true, message: '请输入计划名称', trigger: 'blur' }
+        ]
+      },
+      formLabelWidth: '120px',
+      formInputWidth: 'width:240px',
+    }
+  },
+  created() {
+
+  },
+  methods: {
+    /**
+     * 初始化数据
+     */
+    initData() {
+
+    },
+    /**
+     * 显示对话框添加=>外部调用
+     */
+    showAdd() {
+      this.dialogTitle = this.formTitle + ' - 添加'
+      this.visibleDialog = true
+      this.action = 'add'
+      this.initData()
+      this.$nextTick(() => {
+        this.$refs.ruleForm.resetFields()
+      })
+    },
+    /**
+     * 显示对话框编辑=>外部调用
+     */
+    showEdit(obj) {
+      this.btnLoading = true
+      const formData = JSON.parse(JSON.stringify(obj))
+      this.dialogTitle = this.formTitle + ' - 编辑'
+      this.visibleDialog = true
+      this.action = 'edit'
+      this.initData()
+      this.$nextTick(() => {
+        this.$refs.ruleForm.clearValidate()
+        this.form = formData
+        this.btnLoading = false
+      })
+    },
+    /**
+     * 提交对话框事件
+     */
+    handleSubmit() {
+      this.$refs.ruleForm.validate((valid) => {
+        if (valid) {
+          if (this.action === 'add') {
+            {%lowerClassName%}Add(this.form).then(() => {
+              this.visibleDialog = false
+              this.$message.success('添加成功!')
+              // 回传父组件事件,可以携带数据
+              this.$emit('children')
+            })
+          }
+
+          if (this.action === 'edit') {
+            {%lowerClassName%}Edit(this.form).then(() => {
+              this.visibleDialog = false
+              this.$message.success('修改成功!')
+              // 回传父组件事件,可以携带数据
+              this.$emit('children')
+            })
+          }
+        }
+      })
+    },
+    /**
+     * 关闭对话框事件
+     */
+    handleCancel() {
+      this.visibleDialog = false
+    }
+  }
+}
+</script>

@@ -1,0 +1,58 @@
+import request from '@/utils/request'
+
+/* ----------------{%titleName%}操作---------------- */
+
+/**
+  * {%titleName%}数据列表
+  */
+export function {%lowerClassName%}List(data) {
+  return request({
+    url: '/api/{%lowerClassName%}/index',
+    method: 'POST',
+    data
+  })
+}
+
+/**
+  * {%titleName%}数据添加
+  */
+export function {%lowerClassName%}Add(data) {
+  return request({
+    url: '/api/{%lowerClassName%}/add',
+    method: 'POST',
+    data
+  })
+}
+
+/**
+  * {%titleName%}数据编辑
+  */
+export function {%lowerClassName%}Edit(data) {
+  return request({
+    url: '/api/{%lowerClassName%}/edit',
+    method: 'POST',
+    data
+  })
+}
+
+/**
+  * {%titleName%}数据读取
+  */
+export function {%lowerClassName%}Read(data) {
+  return request({
+    url: '/api/{%lowerClassName%}/read',
+    method: 'GET',
+    params: data
+  })
+}
+
+/**
+  * {%titleName%}数据删除
+  */
+export function {%lowerClassName%}Delete(data) {
+  return request({
+    url: '/api/{%lowerClassName%}/delete',
+    method: 'GET',
+    params: data
+  })
+}

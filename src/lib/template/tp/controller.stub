@@ -1,0 +1,87 @@
+<?php
+declare (strict_types = 1);
+
+namespace app\api\controller;
+
+use think\Request;
+use app\api\model\{%className%} as {%className%}Model;
+
+/**
+ * {%titleName%}控制器
+ */
+class {%className%} extends Base
+{
+    /**
+     * {%titleName%}数据列表
+     */
+    public function index(Request $request)
+    {
+        //
+        $model = new {%className%}Model;
+        $where = [];
+        $order = [];
+        $data = $model->getList($where, $order);
+        return $this->buildSuccess($data);
+    }
+
+    /**
+     * {%titleName%}新增
+     */
+    public function add(Request $request)
+    {
+        //
+        $model = new {%className%}Model;      
+        {%modelInfo%}
+        if($model->save()){
+            return $this->buildSuccess([], '数据添加成功');
+        }else{
+            return $this->buildFailed(ReturnCode::ERROR, '数据添加失败');
+        }
+        
+    }
+
+    /**
+     * {%titleName%}数据编辑
+     */
+    public function edit(Request $request)
+    {
+        //
+        $id = $request->post('{%pKey%}');
+        $model = {%className%}Model::find($id);   
+        {%modelInfo%}
+        if ($model->save()) {
+            return $this->buildSuccess([], '数据保存成功');
+        } else {
+            return $this->buildFailed(ReturnCode::ERROR, '数据保存失败');
+        }
+    }
+
+    /**
+     * {%titleName%}数据读取
+     */
+    public function read($id)
+    {
+        //
+        $model = {%className%}Model::where('is_delete', 0)->find($id);
+        
+        if (!$model) {
+            return $this->buildFailed(ReturnCode::ERROR, '读取失败');
+        }
+        return $this->buildSuccess($model, '数据不存在');
+    }
+
+    /**
+     * {%titleName%}数据软删除
+     */
+    public function delete($id)
+    {
+        //
+        $model = {%className%}Model::find($id);
+        $model->is_delete = 1;
+        
+        if (!$model->save()) {
+            return $this->buildFailed(ReturnCode::ERROR, '删除失败');
+        }
+        return $this->buildSuccess('删除成功');
+    }
+}

@@ -40,8 +40,8 @@ class Table extends Common
         // 生成vue组件form页
         $table = input('table');
 
-        // Manage::instance()->buildController($table);
-        // Manage::instance()->buildModel($table);
+        Manage::instance()->buildController($table);
+        Manage::instance()->buildModel($table);
         Manage::instance()->buildVueList($table);
         Manage::instance()->buildVueForm($table);
         Manage::instance()->buildVueAPi($table);

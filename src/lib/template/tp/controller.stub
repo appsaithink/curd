@@ -4,6 +4,7 @@ declare (strict_types = 1);
 namespace app\api\controller;
 
 use think\Request;
+use app\util\ReturnCode;
 use app\api\model\{%className%} as {%className%}Model;
 
 /**

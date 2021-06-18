@@ -221,7 +221,7 @@ class File extends Manage
         $fields = $this->fields($table);
         
         foreach ($fields as $key => $item) {
-            if (!in_array($item['field'],[$pkey, 'is_delete', 'create_time', 'update_time'])){
+            if (!in_array($item['field'],[$pKey, 'is_delete', 'create_time', 'update_time'])){
                 $modelInfo .= '$model->'.$item['field'].' = $request->post("'.$item['field'].'");'."\r\n        ";
             }            
         }
@@ -353,7 +353,7 @@ class File extends Manage
         if (!is_dir($outPath)) {
             mkdir($outPath, 0777, true);
         }
-        $outFile = $outPath. DIRECTORY_SEPARATOR . $className .'.vue';
+        $outFile = $outPath. DIRECTORY_SEPARATOR . $lowerClassName .'.vue';
         file_put_contents($outFile, $strOut);
     }
 
